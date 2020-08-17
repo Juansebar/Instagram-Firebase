@@ -15,6 +15,7 @@
 		240D3FFB24EADC6A008125FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 240D3FF924EADC6A008125FE /* LaunchScreen.storyboard */; };
 		240D400324EADCDD008125FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 240D400224EADCDD008125FE /* GoogleService-Info.plist */; };
 		240D400524EAE8F4008125FE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240D400424EAE8F4008125FE /* Extensions.swift */; };
+		240D400924EB3C32008125FE /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240D400824EB3C32008125FE /* MainTabBarController.swift */; };
 		6FED1B34A5429E7048C42763 /* Pods_Instagram_Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		240D3FFC24EADC6A008125FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		240D400224EADCDD008125FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		240D400424EAE8F4008125FE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		240D400824EB3C32008125FE /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		83F1668276916AA42F32D7F0 /* Pods-Instagram Firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram Firebase/Pods-Instagram Firebase.release.xcconfig"; sourceTree = "<group>"; };
 		B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Instagram_Firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -71,6 +73,7 @@
 				240D3FEE24EADC68008125FE /* AppDelegate.swift */,
 				240D3FF024EADC68008125FE /* SceneDelegate.swift */,
 				240D3FF224EADC68008125FE /* ViewController.swift */,
+				240D400824EB3C32008125FE /* MainTabBarController.swift */,
 				240D3FF424EADC68008125FE /* Main.storyboard */,
 				240D3FF724EADC6A008125FE /* Assets.xcassets */,
 				240D3FF924EADC6A008125FE /* LaunchScreen.storyboard */,
@@ -226,6 +229,7 @@
 			files = (
 				240D3FF324EADC68008125FE /* ViewController.swift in Sources */,
 				240D3FEF24EADC68008125FE /* AppDelegate.swift in Sources */,
+				240D400924EB3C32008125FE /* MainTabBarController.swift in Sources */,
 				240D3FF124EADC68008125FE /* SceneDelegate.swift in Sources */,
 				240D400524EAE8F4008125FE /* Extensions.swift in Sources */,
 			);
@@ -375,7 +379,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y85PE3J97A;
 				INFOPLIST_FILE = "Instagram Firebase/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sebapps.Instagram-Firebase";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -391,7 +398,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y85PE3J97A;
 				INFOPLIST_FILE = "Instagram Firebase/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sebapps.Instagram-Firebase";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

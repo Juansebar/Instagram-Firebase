@@ -16,8 +16,8 @@ class ViewController: UIViewController {
         button.backgroundColor = .white
         button.setImage(UIImage(named: "plus_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
-        button.imageView?.layer.cornerRadius = 140/2
-        button.imageView?.layer.masksToBounds = true
+        button.layer.cornerRadius = 140/2
+        button.layer.masksToBounds = true
 //        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -77,6 +77,16 @@ class ViewController: UIViewController {
         return button
     }()
     
+    private var selectedImage: UIImage? {
+        didSet {
+            guard let image = selectedImage else { return }
+            
+            self.plusPhotoButton.setImage(image, for: .normal)
+            plusPhotoButton.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+            plusPhotoButton.layer.borderWidth = 3
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -114,15 +124,44 @@ class ViewController: UIViewController {
             guard let user = authResult?.user else { return }
             print("Successfully created user: \(user.uid)")
             
-            let usernameValues = ["username": username]
-            let values = [user.uid: usernameValues]
-            Database.database().reference().child("users").updateChildValues(values) { (err, dbRef) in
-                if let err = err {
-                    print("Failed to save user info into db: \(err)")
+            // MARK: - Uploading Profile Image
+            
+            guard let image = self.plusPhotoButton.imageView?.image else { return }
+            guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
+            
+            let filename = UUID().uuidString
+            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
+            
+            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    print("Failed to upload profile image: \(error)")
                     return
                 }
                 
-                print("Successfully saved user info to db")
+                storageRef.downloadURL { (downloadUrl, error) in
+                    if let error = error {
+                        print("Failed to fetch downloadURL: \(error)")
+                        return
+                    }
+                    
+                    guard let profileImageUrl = downloadUrl?.absoluteString else { return }
+                    
+                    print("Successfully uploaded profile image: \(profileImageUrl)")
+                    
+                    // MARK: - Uploading User Info
+                    
+                    let dictionaryValues = ["username": username, "profileImageUrl": profileImageUrl]
+                    let values = [user.uid: dictionaryValues]
+                    Database.database().reference().child("users").updateChildValues(values) { (err, dbRef) in
+                        if let err = err {
+                            print("Failed to save user info into db: \(err)")
+                            return
+                        }
+
+                        print("Successfully saved user info to db")
+                    }
+                }
+                
             }
         }
     }
@@ -135,7 +174,24 @@ class ViewController: UIViewController {
     }
     
     @objc private func handlePlusPhoto() {
-        print(234)
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+}
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            selectedImage = editedImage.withRenderingMode(.alwaysOriginal)
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            selectedImage = originalImage.withRenderingMode(.alwaysOriginal)
+        }
+    
+        dismiss(animated: true, completion: nil)
     }
     
 }
