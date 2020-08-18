@@ -14,6 +14,8 @@ class MainTabBarController : UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        delegate = self
+        
         // Check if user is logged in
         if Auth.auth().currentUser == nil {
             DispatchQueue.main.async {
@@ -88,6 +90,25 @@ class MainTabBarController : UITabBarController {
         }
         
         return navigationController
+    }
+    
+}
+
+extension MainTabBarController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let index = viewControllers?.firstIndex(of: viewController)
+        
+        if index == 2 {
+            let layout = UICollectionViewFlowLayout()
+            let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
+            let photoSelectorNavController = templateNavigationController(root: photoSelectorController, unselectedIcon: nil, selectedIcon: nil)
+            present(photoSelectorNavController, animated: true, completion: nil)
+            
+            return false
+        }
+        
+        return true
     }
     
 }
