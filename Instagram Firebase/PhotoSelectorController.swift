@@ -7,30 +7,71 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoSelectorController: UICollectionViewController {
 
-    private let cellId = "cellID"
-    private let headerId = "headerID"
-    
+    private var photos = [UIImage]()
+    private var assets = [PHAsset]()
+    private var fetchedImages = [String: UIImage]()
+    private var selectedImageIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.backgroundColor = .white
         
-        collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoSelectorHeader.headerId)
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: PhotoSelectorCell.cellId)
         
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.isTranslucent = false
         
         setupNavigationButtons()
+        
+        fetchPhotos()
     }
     
     private func setupNavigationButtons() {
         navigationController?.navigationBar.tintColor = .black
         navigationItem.rightBarButtonItem = .init(title: "Next", style: .plain, target: self, action: #selector(handleNextButtonTap))
+    }
+    
+    private func assetFetchOptions() -> PHFetchOptions {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 15
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchOptions.sortDescriptors = [sortDescriptor]
+        
+        return fetchOptions
+    }
+    
+    private func fetchPhotos() {
+        let fetchOptions = assetFetchOptions()
+        let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        DispatchQueue.global(qos: .background).async {
+            allPhotos.enumerateObjects { (asset, count, stop) in
+                // Access the assets with an ImageManager
+                let imageManager = PHImageManager.default()
+                let targetSize = CGSize(width: 200, height: 200)
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true  // With this options it allows all the images to be resized to the targetSize ending up with better quality photos
+                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { (image, info) in
+                    if let image = image {
+                        self.photos.append(image)
+                        self.assets.append(asset)
+                    }
+                    
+                    // Once you get the last image you are ready to reload data
+                    if count == allPhotos.count - 1 {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+
     }
     
     @objc private func handleNextButtonTap() {
@@ -42,13 +83,14 @@ class PhotoSelectorController: UICollectionViewController {
 extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return photos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .blue
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoSelectorCell.cellId, for: indexPath) as? PhotoSelectorCell else { return UICollectionViewCell() }
         
+        cell.prepareForReuse()
+        cell.image = photos[indexPath.item]
         return cell
     }
     
@@ -70,14 +112,41 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        header.backgroundColor = .red
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PhotoSelectorHeader.headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
+        
+        if photos.count > 0 && photos.count - 1 >= selectedImageIndex {
+            // Check if you have previously fetched an image
+            if let fetchedImage = fetchedImages["\(selectedImageIndex)"] {
+                print("Image Already Fetched.")
+                header.image = fetchedImage
+            } else {
+                print("Fetching Image....")
+                let imageManager = PHImageManager()
+                let targetSize = CGSize(width: 600, height: 600)
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                
+                let selectedAsset = assets[selectedImageIndex]
+                
+                imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .aspectFit, options: options) { (image, info) in
+                    
+                    self.fetchedImages["\(self.selectedImageIndex)"] = image
+                    header.image = image
+                }
+            }
+        }
         
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return .init(width: view.frame.width, height: view.frame.width)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedImageIndex = indexPath.item
+        
+        collectionView.reloadData()
     }
     
 }
