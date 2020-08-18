@@ -37,9 +37,12 @@ class UserProfileController: UICollectionViewController {
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             
             self.user = User(dictionary)
-            self.navigationItem.title = self.user?.username ?? ""
             
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.navigationItem.title = self.user?.username ?? ""
+                
+                self.collectionView.reloadData()
+            }
         }) { (error) in
             print("Failed to fetch user: \(error)")
         }
@@ -55,6 +58,11 @@ class UserProfileController: UICollectionViewController {
             print("Perform log out")
             do {
                 try Auth.auth().signOut()
+                
+                let loginController = LoginController()
+                let navigationController = UINavigationController(rootViewController: loginController)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.present(navigationController, animated: true, completion: nil)
             } catch let signoutError {
                 print("Failed to sign out: \(signoutError)")
             }

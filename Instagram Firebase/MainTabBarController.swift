@@ -18,13 +18,19 @@ class MainTabBarController : UITabBarController {
         if Auth.auth().currentUser == nil {
             DispatchQueue.main.async {
                 let loginController = LoginController()
-                self.present(loginController, animated: true, completion: nil)
+                let navigationController = UINavigationController(rootViewController: loginController)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.present(navigationController, animated: true, completion: nil)
                 return
             }
         }
         
         view.backgroundColor = .white
         
+        setupViewControllers()
+    }
+    
+    private func setupViewControllers() {
         let layout = UICollectionViewFlowLayout()
         let userProfileController = UserProfileController(collectionViewLayout: layout)
         userProfileController.view.backgroundColor = .red
@@ -35,6 +41,10 @@ class MainTabBarController : UITabBarController {
         
         tabBar.tintColor = .black
         viewControllers = [navigationController, UIViewController()]
+    }
+    
+    func resetViewControllers() {
+        setupViewControllers()
     }
     
 }

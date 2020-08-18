@@ -20,6 +20,7 @@
 		240D400E24EB431F008125FE /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240D400D24EB431F008125FE /* UserProfileHeader.swift */; };
 		240D401024EB4ECC008125FE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240D400F24EB4ECC008125FE /* User.swift */; };
 		241CFF7524EC37EE00F2DF5F /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7424EC37EE00F2DF5F /* LoginController.swift */; };
+		241CFF7924EC41F200F2DF5F /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7824EC41F200F2DF5F /* FormTextField.swift */; };
 		6FED1B34A5429E7048C42763 /* Pods_Instagram_Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		240D400D24EB431F008125FE /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		240D400F24EB4ECC008125FE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		241CFF7424EC37EE00F2DF5F /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		241CFF7824EC41F200F2DF5F /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
 		83F1668276916AA42F32D7F0 /* Pods-Instagram Firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram Firebase/Pods-Instagram Firebase.release.xcconfig"; sourceTree = "<group>"; };
 		B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Instagram_Firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -77,18 +79,18 @@
 		240D3FED24EADC68008125FE /* Instagram Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				241CFF7724EC41D900F2DF5F /* CustomViews */,
+				241CFF7624EC3A2D00F2DF5F /* Login */,
 				240D400C24EB430C008125FE /* UserProfile */,
 				240D400724EAEAD8008125FE /* Utils */,
 				240D3FEE24EADC68008125FE /* AppDelegate.swift */,
 				240D3FF024EADC68008125FE /* SceneDelegate.swift */,
-				240D3FF224EADC68008125FE /* SignUpController.swift */,
 				240D400824EB3C32008125FE /* MainTabBarController.swift */,
 				240D3FF424EADC68008125FE /* Main.storyboard */,
 				240D3FF724EADC6A008125FE /* Assets.xcassets */,
 				240D3FF924EADC6A008125FE /* LaunchScreen.storyboard */,
 				240D3FFC24EADC6A008125FE /* Info.plist */,
 				240D400224EADCDD008125FE /* GoogleService-Info.plist */,
-				241CFF7424EC37EE00F2DF5F /* LoginController.swift */,
 			);
 			path = "Instagram Firebase";
 			sourceTree = "<group>";
@@ -109,6 +111,23 @@
 				240D400F24EB4ECC008125FE /* User.swift */,
 			);
 			name = UserProfile;
+			sourceTree = "<group>";
+		};
+		241CFF7624EC3A2D00F2DF5F /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				241CFF7424EC37EE00F2DF5F /* LoginController.swift */,
+				240D3FF224EADC68008125FE /* SignUpController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		241CFF7724EC41D900F2DF5F /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				241CFF7824EC41F200F2DF5F /* FormTextField.swift */,
+			);
+			name = CustomViews;
 			sourceTree = "<group>";
 		};
 		6110F360350A04F729254755 /* Frameworks */ = {
@@ -248,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				240D3FF324EADC68008125FE /* SignUpController.swift in Sources */,
+				241CFF7924EC41F200F2DF5F /* FormTextField.swift in Sources */,
 				240D400E24EB431F008125FE /* UserProfileHeader.swift in Sources */,
 				240D3FEF24EADC68008125FE /* AppDelegate.swift in Sources */,
 				240D400B24EB3D16008125FE /* UserProfileController.swift in Sources */,

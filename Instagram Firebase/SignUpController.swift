@@ -23,32 +23,32 @@ class SignUpController: UIViewController {
     }()
     
     private let emailTextField: UITextField = {
-        let textField = UITextField()
+        let textField = FormTextField()
         textField.placeholder = "Email"
 //        textField.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
-        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
-        textField.borderStyle = .roundedRect
-        textField.font = UIFont.systemFont(ofSize: 14)
+//        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
+//        textField.borderStyle = .roundedRect
+//        textField.font = UIFont.systemFont(ofSize: 14)
         textField.addTarget(self, action: #selector(handleTextInputChanged), for: .editingChanged)
         return textField
     }()
     
     private let usernameTextField: UITextField = {
-        let textField = UITextField()
+        let textField = FormTextField()
         textField.placeholder = "Username"
-        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
-        textField.borderStyle = .roundedRect
-        textField.font = UIFont.systemFont(ofSize: 14)
+//        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
+//        textField.borderStyle = .roundedRect
+//        textField.font = UIFont.systemFont(ofSize: 14)
         textField.addTarget(self, action: #selector(handleTextInputChanged), for: .editingChanged)
         return textField
     }()
     
     private let passwordTextField: UITextField = {
-        let textField = UITextField()
+        let textField = FormTextField()
         textField.placeholder = "Password"
-        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
-        textField.borderStyle = .roundedRect
-        textField.font = UIFont.systemFont(ofSize: 14)
+//        textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
+//        textField.borderStyle = .roundedRect
+//        textField.font = UIFont.systemFont(ofSize: 14)
         textField.isSecureTextEntry = true
         textField.addTarget(self, action: #selector(handleTextInputChanged), for: .editingChanged)
         return textField
@@ -77,6 +77,19 @@ class SignUpController: UIViewController {
         return button
     }()
     
+    private let signInButton: UIButton = {
+            let button = UIButton(type: .system)
+            
+            let attributedTitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
+            attributedTitle.append(NSAttributedString(string: "Sign In", attributes: [NSAttributedString.Key.foregroundColor : UIColor.rgb(r: 17, g: 154, b: 237), NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)]))
+            
+            button.setAttributedTitle(attributedTitle, for: .normal)
+            
+    //        button.setTitle("Don't have an account? Sign Up", for: .normal)
+            button.addTarget(self, action: #selector(handleShowSignIn), for: .touchUpInside)
+            return button
+        }()
+    
     private var selectedImage: UIImage? {
         didSet {
             guard let image = selectedImage else { return }
@@ -99,6 +112,7 @@ class SignUpController: UIViewController {
     private func setupViews() {
         view.addSubview(plusPhotoButton)
         view.addSubview(textFieldStackView)
+        view.addSubview(signInButton)
     }
     
     private func setConstraints() {
@@ -107,7 +121,9 @@ class SignUpController: UIViewController {
         
         emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        textFieldStackView.anchor(top: plusPhotoButton.bottomAnchor, left: view.readableContentGuide.leftAnchor, bottom: nil, right: view.readableContentGuide.rightAnchor, paddingTop: 20, paddingLeft: 25, paddingBottom: 0, paddingRight: -25, width: 0, height: 0)
+        textFieldStackView.anchor(top: plusPhotoButton.bottomAnchor, left: view.readableContentGuide.leftAnchor, bottom: nil, right: view.readableContentGuide.rightAnchor, paddingTop: 20, paddingLeft: 25, paddingBottom: 0, paddingRight: 25, width: 0, height: 0)
+        
+        signInButton.anchor(top: nil, left: view.leftAnchor, bottom: view.readableContentGuide.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
     }
 
     @objc private func handleSignUp() {
@@ -159,6 +175,14 @@ class SignUpController: UIViewController {
                         }
 
                         print("Successfully saved user info to db")
+                        DispatchQueue.main.async {
+                            let window = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+                            guard let mainTabBarController = window?.rootViewController as? MainTabBarController else { return }
+                            
+                            mainTabBarController.resetViewControllers()
+                            
+                            self.navigationController?.dismiss(animated: true, completion: nil)
+                        }
                     }
                 }
                 
@@ -178,6 +202,14 @@ class SignUpController: UIViewController {
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
         present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    @objc private func handleShowSignIn() {
+//        for controller in navigationController?.viewControllers {
+//            if
+//        }
+        
+        _ = navigationController?.popViewController(animated: true)
     }
     
 }
