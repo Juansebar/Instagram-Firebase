@@ -25,14 +25,8 @@ class UserProfileController: UICollectionViewController {
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as? UserProfileHeader else { return UICollectionViewCell() }
         
-        header.user = user
-        header.backgroundColor = .white
-        return header
+        setupLogoutButton()
     }
     
     private func fetchUser() {
@@ -51,6 +45,29 @@ class UserProfileController: UICollectionViewController {
         }
     }
     
+    private func setupLogoutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogout))
+    }
+    
+    @objc private func handleLogout() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
+            print("Perform log out")
+            do {
+                try Auth.auth().signOut()
+            } catch let signoutError {
+                print("Failed to sign out: \(signoutError)")
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+}
+
+extension UserProfileController: UICollectionViewDelegateFlowLayout {
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -66,9 +83,13 @@ class UserProfileController: UICollectionViewController {
         return cell
     }
     
-}
-
-extension UserProfileController: UICollectionViewDelegateFlowLayout {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as? UserProfileHeader else { return UICollectionViewCell() }
+        
+        header.user = user
+        header.backgroundColor = .white
+        return header
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return .init(width: view.frame.width, height: 200)

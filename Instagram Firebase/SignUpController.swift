@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SignUpController.swift
 //  Instagram Firebase
 //
 //  Created by Juan Ramirez on 8/17/20.
@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController {
+class SignUpController: UIViewController {
 
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)  // Makes it highlight with white
@@ -182,7 +182,7 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
