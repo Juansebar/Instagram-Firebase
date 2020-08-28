@@ -19,11 +19,25 @@ class PhotoSelectorCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let selectedBadgeView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .green
+        view.clipsToBounds = true
+        view.isHidden = true
+        return view
+    }()
+    
     var image: UIImage? {
         didSet {
             guard let image = image else { return }
             
             photoImageView.image = image
+        }
+    }
+    
+    var isImageSelected: Bool = false {
+        didSet {
+            selectedBadgeView.isHidden = !isImageSelected
         }
     }
     
@@ -41,12 +55,16 @@ class PhotoSelectorCell: UICollectionViewCell {
     
     private func setupViews() {
         addSubview(photoImageView)
+        addSubview(selectedBadgeView)
         
         photoImageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        selectedBadgeView.anchor(top: nil, left: nil, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 10, width: 10, height: 10)
+        selectedBadgeView.layer.cornerRadius = 5
     }
     
     override func prepareForReuse() {
         photoImageView.image = nil
+        isImageSelected = false
     }
     
 }

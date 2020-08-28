@@ -15,6 +15,7 @@ class PhotoSelectorController: UICollectionViewController {
     private var assets = [PHAsset]()
     private var fetchedImages = [String: UIImage]()
     private var selectedImageIndex = 0
+    private var selectedImageHighQuality: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +40,7 @@ class PhotoSelectorController: UICollectionViewController {
     
     private func assetFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 15
+        fetchOptions.fetchLimit = 20
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchOptions.sortDescriptors = [sortDescriptor]
         
@@ -75,7 +76,13 @@ class PhotoSelectorController: UICollectionViewController {
     }
     
     @objc private func handleNextButtonTap() {
-        print("Handle next")
+        if let image = selectedImageHighQuality {
+            let sharedPhotoController = SharePhotoController()
+            sharedPhotoController.selectedImage = image
+            navigationController?.pushViewController(sharedPhotoController, animated: true)
+        } else {
+            print("Need to select an image to share")
+        }
     }
     
 }
@@ -91,6 +98,11 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         
         cell.prepareForReuse()
         cell.image = photos[indexPath.item]
+        
+        if selectedImageIndex == indexPath.item {
+            cell.isImageSelected = true
+        }
+        
         return cell
     }
     
@@ -132,6 +144,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
                     
                     self.fetchedImages["\(self.selectedImageIndex)"] = image
                     header.image = image
+                    self.selectedImageHighQuality = image
                 }
             }
         }
@@ -147,6 +160,8 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         selectedImageIndex = indexPath.item
         
         collectionView.reloadData()
+        
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .bottom, animated: true)
     }
     
 }
