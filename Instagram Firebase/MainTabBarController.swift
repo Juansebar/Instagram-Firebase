@@ -34,7 +34,8 @@ class MainTabBarController : UITabBarController {
     
     private func setupViewControllers() {
         // Home
-        let homeController = UIViewController()
+        let flowLayout = UICollectionViewFlowLayout()
+        let homeController = HomeController(collectionViewLayout: flowLayout)
         homeController.view.backgroundColor = .white
         let homeNavController = templateNavigationController(root: homeController, unselectedIcon: "home_unselected", selectedIcon: "home_selected")
         
