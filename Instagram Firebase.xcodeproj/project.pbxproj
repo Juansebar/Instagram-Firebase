@@ -25,6 +25,9 @@
 		241CFF7E24EC914300F2DF5F /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7D24EC914300F2DF5F /* PhotoSelectorCell.swift */; };
 		241CFF8024EC948E00F2DF5F /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7F24EC948E00F2DF5F /* PhotoSelectorHeader.swift */; };
 		2481C93B24ED8E8500C0B029 /* SharePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2481C93A24ED8E8500C0B029 /* SharePhotoController.swift */; };
+		24E34AEA24FEA3BE008B9D2C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E34AE924FEA3BE008B9D2C /* Post.swift */; };
+		24E34AEC24FEA51D008B9D2C /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E34AEB24FEA51D008B9D2C /* UserProfilePhotoCell.swift */; };
+		24E34AEE24FEA952008B9D2C /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E34AED24FEA952008B9D2C /* CustomImageView.swift */; };
 		6FED1B34A5429E7048C42763 /* Pods_Instagram_Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +53,9 @@
 		241CFF7D24EC914300F2DF5F /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		241CFF7F24EC948E00F2DF5F /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
 		2481C93A24ED8E8500C0B029 /* SharePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoController.swift; sourceTree = "<group>"; };
+		24E34AE924FEA3BE008B9D2C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		24E34AEB24FEA51D008B9D2C /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotoCell.swift; sourceTree = "<group>"; };
+		24E34AED24FEA952008B9D2C /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		83F1668276916AA42F32D7F0 /* Pods-Instagram Firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram Firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram Firebase/Pods-Instagram Firebase.release.xcconfig"; sourceTree = "<group>"; };
 		B0AC3A7133AAA0C869A64281 /* Pods_Instagram_Firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Instagram_Firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -87,6 +93,7 @@
 		240D3FED24EADC68008125FE /* Instagram Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				24E34AE824FEA3AF008B9D2C /* Models */,
 				241CFF7C24EC85E400F2DF5F /* AddPhoto */,
 				241CFF7724EC41D900F2DF5F /* CustomViews */,
 				241CFF7624EC3A2D00F2DF5F /* Login */,
@@ -108,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				240D400424EAE8F4008125FE /* Extensions.swift */,
+				24E34AED24FEA952008B9D2C /* CustomImageView.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -118,6 +126,7 @@
 				240D400A24EB3D16008125FE /* UserProfileController.swift */,
 				240D400D24EB431F008125FE /* UserProfileHeader.swift */,
 				240D400F24EB4ECC008125FE /* User.swift */,
+				24E34AEB24FEA51D008B9D2C /* UserProfilePhotoCell.swift */,
 			);
 			name = UserProfile;
 			sourceTree = "<group>";
@@ -148,6 +157,14 @@
 				2481C93A24ED8E8500C0B029 /* SharePhotoController.swift */,
 			);
 			name = AddPhoto;
+			sourceTree = "<group>";
+		};
+		24E34AE824FEA3AF008B9D2C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				24E34AE924FEA3BE008B9D2C /* Post.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		6110F360350A04F729254755 /* Frameworks */ = {
@@ -295,11 +312,14 @@
 				240D400B24EB3D16008125FE /* UserProfileController.swift in Sources */,
 				241CFF7524EC37EE00F2DF5F /* LoginController.swift in Sources */,
 				240D401024EB4ECC008125FE /* User.swift in Sources */,
+				24E34AEA24FEA3BE008B9D2C /* Post.swift in Sources */,
 				240D400924EB3C32008125FE /* MainTabBarController.swift in Sources */,
 				241CFF8024EC948E00F2DF5F /* PhotoSelectorHeader.swift in Sources */,
 				241CFF7B24EC85CF00F2DF5F /* PhotoSelectorController.swift in Sources */,
 				240D3FF124EADC68008125FE /* SceneDelegate.swift in Sources */,
 				240D400524EAE8F4008125FE /* Extensions.swift in Sources */,
+				24E34AEE24FEA952008B9D2C /* CustomImageView.swift in Sources */,
+				24E34AEC24FEA51D008B9D2C /* UserProfilePhotoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -40,7 +40,7 @@ class PhotoSelectorController: UICollectionViewController {
     
     private func assetFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 20
+        fetchOptions.fetchLimit = 30
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchOptions.sortDescriptors = [sortDescriptor]
         
@@ -72,7 +72,6 @@ class PhotoSelectorController: UICollectionViewController {
                 }
             }
         }
-
     }
     
     @objc private func handleNextButtonTap() {

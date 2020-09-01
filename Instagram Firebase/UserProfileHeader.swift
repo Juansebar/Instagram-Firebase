@@ -10,8 +10,8 @@ import UIKit
 
 class UserProfileHeader: UICollectionViewCell {
     
-    private let profileImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let profileImageView: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.backgroundColor = .lightGray
         imageView.layer.masksToBounds = true
         return imageView
@@ -101,7 +101,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     private var _user: User? {
         didSet {
-            setupProfileImage()
+            profileImageView.loadImage(urlString: _user!.profileImageUrl)
             usernameLabel.text = _user!.username
         }
     }
@@ -165,24 +165,6 @@ class UserProfileHeader: UICollectionViewCell {
         
         topDividerView.anchor(top: stackView.topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
         bottomDividerView.anchor(top: nil, left: leftAnchor, bottom: stackView.bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
-    }
-    
-    private func setupProfileImage() {
-        guard _user != nil else { return }
-        guard let url = URL(string: _user!.profileImageUrl) else { return }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                print("Failed to download user profile image: \(error)")
-                return
-            }
-            
-            guard let data = data else { return }
-            let image = UIImage(data: data)
-            
-            DispatchQueue.main.async {
-                self.profileImageView.image = image
-            }
-        }.resume()
     }
     
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SharePhotoController: UIViewController {
     
@@ -36,6 +37,12 @@ class SharePhotoController: UIViewController {
         }
     }
     
+    private var isShareButtonEnabled: Bool! {
+        didSet {
+            navigationItem.rightBarButtonItem?.isEnabled = isShareButtonEnabled
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,7 +69,64 @@ class SharePhotoController: UIViewController {
     }
     
     @objc private func handleSharePhoto() {
+        // Disable button interaction
+        isShareButtonEnabled = false
         
+        // Upload the image to Firestore Image
+        guard let image = selectedImage else { return }
+        guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
+        let filename = UUID().uuidString
+        
+        let sharePostreference = Storage.storage().reference().child("posts").child(filename)
+        sharePostreference.putData(uploadData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                print("Failed to upload post image: \(error)")
+                self.isShareButtonEnabled = true
+                return
+            }
+            
+            sharePostreference.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("Uh-oh, an error occurred acquiring the download url")
+                    return
+                }
+                
+                self.saveToDatabaseWithImageURL(url: downloadURL.absoluteString)
+                print("Successfully uploaded post image: \(downloadURL.absoluteString)")
+            }
+        }
+    }
+    
+    private func saveToDatabaseWithImageURL(url: String) {
+        // Post Image
+        guard let postImage = selectedImage else { return }
+        
+        // Post Caption
+        guard let caption = textView.text else { return }
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let userPostReference = Database.database().reference().child("posts").child(uid)
+        
+        let postReference = userPostReference.childByAutoId()
+        
+        let values = [
+            "imageUrl": url,
+            "caption": caption,
+            "imageWidth": postImage.size.width,
+            "imageHeight": postImage.size.height,
+            "creationDate": Date().timeIntervalSince1970
+        ] as [String: Any]
+        
+        postReference.updateChildValues(values) { (error, dbReference) in
+            if let error = error {
+                self.isShareButtonEnabled = true
+                print("Failed to save post to DB: \(error)")
+                return
+            }
+            
+            print("Successfully uploaded post to DB")
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
 }

@@ -13,8 +13,9 @@ class UserProfileController: UICollectionViewController {
     
     private var user: User?
     
-    private let cellId = "userMiniPostCellID"
     private let interItemSpacing: CGFloat = 0.5
+    
+    private var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +23,11 @@ class UserProfileController: UICollectionViewController {
         collectionView?.backgroundColor = .white
         
         fetchUser()
+//        fetchPosts()
+        fetchOrderedPosts()
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: UserProfilePhotoCell.cellId)
         
         setupLogoutButton()
     }
@@ -72,6 +75,45 @@ class UserProfileController: UICollectionViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+    private func fetchPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let reference = Database.database().reference().child("posts").child(uid)
+        
+        reference.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
+            
+            snapshotDictionaries.forEach { (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
+                
+                let post = Post(dictionary: dictionary)
+                self.posts.append(post)
+            }
+            
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Failed to fetch posts: \(error)")
+        }
+    }
+    
+    private func fetchOrderedPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("posts").child(uid)
+        
+        // Later implement some pagination of data
+        ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
+            print(snapshot.key)
+            print(snapshot.value)
+            
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            let post = Post(dictionary: dictionary)
+            self.posts.append(post)
+            
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Failed to fetch new post: \(error)")
+        }
+    }
+    
 }
 
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
@@ -81,13 +123,13 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfilePhotoCell.cellId, for: indexPath) as? UserProfilePhotoCell else { return UICollectionViewCell() }
         
-        cell.backgroundColor = .purple
+        cell.post = posts[indexPath.item]
         return cell
     }
     
