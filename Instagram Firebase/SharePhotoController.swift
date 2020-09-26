@@ -102,12 +102,12 @@ class SharePhotoController: UIViewController {
         guard let postImage = selectedImage else { return }
         
         // Post Caption
-        guard let caption = textView.text else { return }
+        guard let caption = textView.text, caption.count > 0 else { return }
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let userPostReference = Database.database().reference().child("posts").child(uid)
         
-        let postReference = userPostReference.childByAutoId()
+        let postReference = userPostReference.childByAutoId() // Creates a new child automatically
         
         let values = [
             "imageUrl": url,

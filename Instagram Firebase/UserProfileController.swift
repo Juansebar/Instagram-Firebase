@@ -103,11 +103,11 @@ class UserProfileController: UICollectionViewController {
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             print(snapshot.key)
             print(snapshot.value)
-            
+
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             let post = Post(dictionary: dictionary)
             self.posts.append(post)
-            
+
             self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch new post: \(error)")
