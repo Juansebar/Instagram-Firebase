@@ -10,10 +10,12 @@ import UIKit
 
 struct User {
     
+    let uid: String
     let username: String
     let profileImageUrl: String
     
-    init(_ dictionary: [String: Any]) {
+    init(uid: String, _ dictionary: [String: Any]) {
+        self.uid = uid
         username = dictionary["username"] as? String ?? ""
         profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
     }

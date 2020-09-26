@@ -33,30 +33,27 @@ class HomeController: UICollectionViewController {
     private func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
-        let userReference = Database.database().reference().child("users").child(uid)
+        Database.fetchUserWithUID(uid: uid) { [unowned self] (user) in
+            self.fetchPostsWithUser(user)
+        }
+    }
+    
+    fileprivate func fetchPostsWithUser(_ user: User) {
+        let reference = Database.database().reference().child("posts").child(user.uid)
         
-        userReference.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let userDictonary = snapshot.value as? [String: Any] else { return }
+        reference.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
             
-            let user = User(userDictonary)
-            
-            let reference = Database.database().reference().child("posts").child(uid)
-            reference.observeSingleEvent(of: .value, with: { (snapshot) in
-                guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
-
-                snapshotDictionaries.forEach { (key, value) in
-                    guard let dictionary = value as? [String: Any] else { return }
-
-                    let post = Post(user: user, dictionary: dictionary)
-                    self.posts.append(post)
-                }
-
-                self.collectionView.reloadData()
-            }) { (error) in
-                print("Failed to fetch posts: \(error)")
+            snapshotDictionaries.forEach { (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
+                
+                let post = Post(user: user, dictionary: dictionary)
+                self.posts.append(post)
             }
+            
+            self.collectionView.reloadData()
         }) { (error) in
-            print("Failed to fetch user for posts:", error)
+            print("Failed to fetch posts: \(error)")
         }
     }
     

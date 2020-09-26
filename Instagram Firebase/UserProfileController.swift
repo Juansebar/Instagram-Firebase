@@ -36,21 +36,13 @@ class UserProfileController: UICollectionViewController {
     private func fetchUser(completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        // Same as fetching the current value at the DB node
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
+        Database.fetchUserWithUID(uid: uid) { [unowned self] (user) in
+            self.user = user
             
-            self.user = User(dictionary)
-            
-            DispatchQueue.main.async {
-                self.navigationItem.title = self.user?.username ?? ""
-                
-                self.collectionView.reloadData()
-            }
+            self.navigationItem.title = self.user?.username ?? ""
+            self.collectionView.reloadData()
             
             completion()
-        }) { (error) in
-            print("Failed to fetch user: \(error)")
         }
     }
     
