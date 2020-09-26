@@ -22,9 +22,10 @@ class UserProfileController: UICollectionViewController {
         
         collectionView?.backgroundColor = .white
         
-        fetchUser()
+        fetchUser {
+            self.fetchOrderedPosts()
+        }
 //        fetchPosts()
-        fetchOrderedPosts()
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: UserProfilePhotoCell.cellId)
@@ -32,7 +33,7 @@ class UserProfileController: UICollectionViewController {
         setupLogoutButton()
     }
     
-    private func fetchUser() {
+    private func fetchUser(completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         // Same as fetching the current value at the DB node
@@ -46,6 +47,8 @@ class UserProfileController: UICollectionViewController {
                 
                 self.collectionView.reloadData()
             }
+            
+            completion()
         }) { (error) in
             print("Failed to fetch user: \(error)")
         }
@@ -85,7 +88,8 @@ class UserProfileController: UICollectionViewController {
             snapshotDictionaries.forEach { (key, value) in
                 guard let dictionary = value as? [String: Any] else { return }
                 
-                let post = Post(dictionary: dictionary)
+                guard let user = self.user else { return }
+                let post = Post(user: user, dictionary: dictionary)
                 self.posts.append(post)
             }
             
@@ -101,12 +105,14 @@ class UserProfileController: UICollectionViewController {
         
         // Later implement some pagination of data
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
-            print(snapshot.key)
-            print(snapshot.value)
+//            print(snapshot.key)
+//            print(snapshot.value)
 
+            guard let user = self.user else { return }
             guard let dictionary = snapshot.value as? [String: Any] else { return }
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
+            let post = Post(user: user, dictionary: dictionary)
+            self.posts.insert(post, at: 0)
+//            self.posts.append(post)
 
             self.collectionView.reloadData()
         }) { (error) in

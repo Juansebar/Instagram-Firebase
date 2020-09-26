@@ -14,9 +14,14 @@ class HomePostCell: UICollectionViewCell {
     
     var post: Post? {
         didSet {
+            guard let postProfileImageUrl = post?.user.profileImageUrl else { return }
             guard let postImageUrl = post?.imageUrl else { return }
             
+            userProfileImageView.loadImage(urlString: postProfileImageUrl)
+            usernameLabel.text = post?.user.username
             photoImageView.loadImage(urlString: postImageUrl)
+            
+            setupAttributedCaption()
         }
     }
     
@@ -75,13 +80,6 @@ class HomePostCell: UICollectionViewCell {
     
     private let captionLabel: UILabel = {
         let label = UILabel()
-        
-        let attributedText = NSMutableAttributedString(string: "Username", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSAttributedString(string: " Some caption text that will be awesome to display to other users.", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]))
-        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
-        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.gray]))
-        
-        label.attributedText = attributedText
         label.numberOfLines = 0
         
         return label
@@ -124,6 +122,17 @@ class HomePostCell: UICollectionViewCell {
         
         addSubview(bookmarkButton)
         bookmarkButton.anchor(top: photoImageView.bottomAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 40, height: 50)
+    }
+    
+    private func setupAttributedCaption() {
+        guard let post = self.post else { return }
+        
+        let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: " \(post.caption)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 4)]))
+        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.gray]))
+        
+        captionLabel.attributedText = attributedText
     }
     
 }
