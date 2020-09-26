@@ -25,7 +25,9 @@ class HomeController: UICollectionViewController {
     }
     
     private func setupNavigationItems() {
-        navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+//        navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        navigationItem.titleView = UIImageView(image: UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate))
+        navigationItem.titleView?.tintColor = .black
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -67,7 +69,5 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return .init(width: collectionView.frame.width, height: 200)
     }
-    
-    
     
 }
