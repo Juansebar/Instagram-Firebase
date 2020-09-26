@@ -34,13 +34,14 @@ class MainTabBarController : UITabBarController {
     
     private func setupViewControllers() {
         // Home
-        let flowLayout = UICollectionViewFlowLayout()
-        let homeController = HomeController(collectionViewLayout: flowLayout)
+        let homeFlowLayout = UICollectionViewFlowLayout()
+        let homeController = HomeController(collectionViewLayout: homeFlowLayout)
         homeController.view.backgroundColor = .white
         let homeNavController = templateNavigationController(root: homeController, unselectedIcon: "home_unselected", selectedIcon: "home_selected")
         
         // Search
-        let searchController = UIViewController()
+        let searchFlowlayout = UICollectionViewFlowLayout()
+        let searchController = UserSearchController(collectionViewLayout: searchFlowlayout)
         searchController.view.backgroundColor = .white
         let searchNavController = templateNavigationController(root: searchController, unselectedIcon: "search_unselected", selectedIcon: "search_selected")
         
@@ -55,8 +56,8 @@ class MainTabBarController : UITabBarController {
         let favoritesNavController = templateNavigationController(root: favoritesController, unselectedIcon: "like_unselected", selectedIcon: "like_selected")
         
         // User Profile
-        let layout = UICollectionViewFlowLayout()
-        let userProfileController = UserProfileController(collectionViewLayout: layout)
+        let profileFlowlayout = UICollectionViewFlowLayout()
+        let userProfileController = UserProfileController(collectionViewLayout: profileFlowlayout)
         userProfileController.view.backgroundColor = .white
         let userProfileNavController = templateNavigationController(root: userProfileController, unselectedIcon: "profile_unselected", selectedIcon: "profile_selected")
         
