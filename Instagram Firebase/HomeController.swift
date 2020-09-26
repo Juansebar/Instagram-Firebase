@@ -75,7 +75,13 @@ extension HomeController {
 extension HomeController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: collectionView.frame.width, height: 200)
+        // This is how to render a 1:1 aspect ratio
+        var height: CGFloat = 40 + 8 + 8 // Username + userProfileImageView
+        height += view.frame.width // For image
+        height += 50  // For action buttons
+        height += 60
+        
+        return .init(width: collectionView.frame.width, height: height)
     }
     
 }
