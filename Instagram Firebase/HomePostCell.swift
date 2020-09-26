@@ -12,14 +12,6 @@ class HomePostCell: UICollectionViewCell {
     
     static let cellId = "HomeControllerCellId"
     
-    private let photoImageView: CustomImageView = {
-        let imageView = CustomImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .blue
-        return imageView
-    }()
-    
     var post: Post? {
         didSet {
             guard let postImageUrl = post?.imageUrl else { return }
@@ -27,6 +19,13 @@ class HomePostCell: UICollectionViewCell {
             photoImageView.loadImage(urlString: postImageUrl)
         }
     }
+    
+    private let photoImageView: CustomImageView = {
+        let imageView = CustomImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

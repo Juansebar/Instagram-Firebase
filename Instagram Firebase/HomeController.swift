@@ -25,10 +25,36 @@ class HomeController: UICollectionViewController {
     }
     
     private func setupNavigationItems() {
-//        navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
-        navigationItem.titleView = UIImageView(image: UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate))
+        let instagramLogoImage = UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate)
+        navigationItem.titleView = UIImageView(image: instagramLogoImage)
         navigationItem.titleView?.tintColor = .black
     }
+    
+    private func fetchPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let reference = Database.database().reference().child("posts").child(uid)
+
+        reference.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
+
+            snapshotDictionaries.forEach { (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
+
+                let post = Post(dictionary: dictionary)
+                self.posts.append(post)
+            }
+
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Failed to fetch posts: \(error)")
+        }
+    }
+    
+}
+
+// MARK: - Datasource
+
+extension HomeController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
@@ -42,27 +68,9 @@ class HomeController: UICollectionViewController {
         return cell
     }
     
-    private func fetchPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let reference = Database.database().reference().child("posts").child(uid)
-        
-        reference.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
-            
-            snapshotDictionaries.forEach { (key, value) in
-                guard let dictionary = value as? [String: Any] else { return }
-                
-                let post = Post(dictionary: dictionary)
-                self.posts.append(post)
-            }
-            
-            self.collectionView.reloadData()
-        }) { (error) in
-            print("Failed to fetch posts: \(error)")
-        }
-    }
-    
 }
+
+// MARK: - HomeController: UICollectionViewDelegateFlowLayout
 
 extension HomeController: UICollectionViewDelegateFlowLayout {
     
