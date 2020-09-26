@@ -10,6 +10,8 @@ import UIKit
 
 class HomePostCell: UICollectionViewCell {
     
+    static let cellId = "HomeControllerCellId"
+    
     private let photoImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill

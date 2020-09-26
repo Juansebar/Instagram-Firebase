@@ -11,15 +11,13 @@ import Firebase
 
 class HomeController: UICollectionViewController {
     
-    private let cellId = "cellId"
-    
     private var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         
-        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: HomePostCell.cellId)
         
         setupNavigationItems()
         
@@ -35,7 +33,7 @@ class HomeController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomePostCell.cellId, for: indexPath) as? HomePostCell else { return UICollectionViewCell() }
         
         cell.post = posts[indexPath.item]
         

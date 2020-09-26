@@ -58,7 +58,6 @@ class MainTabBarController : UITabBarController {
         let layout = UICollectionViewFlowLayout()
         let userProfileController = UserProfileController(collectionViewLayout: layout)
         userProfileController.view.backgroundColor = .white
-        
         let userProfileNavController = templateNavigationController(root: userProfileController, unselectedIcon: "profile_unselected", selectedIcon: "profile_selected")
         
         tabBar.tintColor = .black
