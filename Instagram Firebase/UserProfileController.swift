@@ -105,14 +105,10 @@ class UserProfileController: UICollectionViewController {
         
         // Later implement some pagination of data
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
-//            print(snapshot.key)
-//            print(snapshot.value)
-
             guard let user = self.user else { return }
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             let post = Post(user: user, dictionary: dictionary)
             self.posts.insert(post, at: 0)
-//            self.posts.append(post)
 
             self.collectionView.reloadData()
         }) { (error) in
