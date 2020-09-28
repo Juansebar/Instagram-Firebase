@@ -11,6 +11,7 @@ import Firebase
 
 class UserProfileController: UICollectionViewController {
     
+    var userId: String?
     private var user: User?
     
     private let interItemSpacing: CGFloat = 0.5
@@ -25,7 +26,6 @@ class UserProfileController: UICollectionViewController {
         fetchUser {
             self.fetchOrderedPosts()
         }
-//        fetchPosts()
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: UserProfilePhotoCell.cellId)
@@ -34,7 +34,7 @@ class UserProfileController: UICollectionViewController {
     }
     
     private func fetchUser(completion: @escaping () -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = userId ?? Auth.auth().currentUser?.uid else { return }
         
         Database.fetchUserWithUID(uid: uid) { [unowned self] (user) in
             self.user = user
@@ -92,7 +92,7 @@ class UserProfileController: UICollectionViewController {
     }
     
     private func fetchOrderedPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         
         // Later implement some pagination of data

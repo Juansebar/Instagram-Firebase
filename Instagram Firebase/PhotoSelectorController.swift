@@ -130,6 +130,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
             if let fetchedImage = fetchedImages["\(selectedImageIndex)"] {
                 print("Image Already Fetched.")
                 header.image = fetchedImage
+                self.selectedImageHighQuality = fetchedImage
             } else {
                 print("Fetching Image....")
                 let imageManager = PHImageManager()
