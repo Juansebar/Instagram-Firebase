@@ -42,14 +42,19 @@ class UserSearchController: UICollectionViewController {
         reference.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
-            dictionaries.forEach { (key, _) in
-                Database.fetchUserWithUID(uid: key) { [unowned self] (user) in
-                    self.users.append(user)
-                    self.filteredUsers.append(user)
-                }
+            dictionaries.forEach { (key, value) in
+                guard let userDictionary = value as? [String: Any] else { return }
                 
-                self.collectionView.reloadData()
+                let user = User(uid: key, userDictionary)
+                self.users.append(user)
             }
+            
+            self.users.sort { (user1, user2) -> Bool in
+                return user1.username.lowercased().compare(user2.username.lowercased()) == .orderedAscending
+            }
+            
+            self.filteredUsers = self.users
+            self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch users: \(error)")
         }
@@ -88,12 +93,12 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout {
 extension UserSearchController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count > 0 {
-            filteredUsers = users.filter { (user) -> Bool in
-                return user.username.contains(searchText)
-            }
-        } else {
+        if searchText.isEmpty {
             filteredUsers = users
+        } else {
+            filteredUsers = users.filter { (user) -> Bool in
+                return user.username.lowercased().contains(searchText.lowercased())
+            }
         }
         
         collectionView.reloadData()
