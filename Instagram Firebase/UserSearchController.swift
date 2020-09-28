@@ -45,6 +45,9 @@ class UserSearchController: UICollectionViewController {
             dictionaries.forEach { (key, value) in
                 guard let userDictionary = value as? [String: Any] else { return }
                 
+                if key == Auth.auth().currentUser?.uid {
+                    return
+                }
                 let user = User(uid: key, userDictionary)
                 self.users.append(user)
             }
