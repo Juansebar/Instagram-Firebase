@@ -184,7 +184,18 @@ class UserProfileHeader: UICollectionViewCell {
         if currentUserId == userId {
             // Edit profile
         } else {
-            editProfileFollowButton.setTitle("Follow", for: .normal)
+            // Check if following
+            let reference = Database.database().reference().child("following").child(currentUserId).child(userId)
+            
+            reference.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
+                    self.setButtonTo(isFollowing: true)
+                } else {
+                    self.setButtonTo(isFollowing: false)
+                }
+            }) { (error) in
+                print("Failed to fetch following user: \(error)")
+            }
         }
     }
     
@@ -193,16 +204,43 @@ class UserProfileHeader: UICollectionViewCell {
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
         guard let userId = _user?.uid else { return }
         
-        let reference = Database.database().reference().child("following").child(currentLoggedInUserId)
-        
-        let values = [userId: 1]
-        
-        reference.updateChildValues(values) { (error, dbReference) in
-            if let error = error {
-                print("Failed to follow user: \(error)")
+        if editProfileFollowButton.titleLabel?.text == "Unfollow" {
+            Database.database().reference().child("following").child(currentLoggedInUserId).child(userId).removeValue { (error, dbReference) in
+                if let error = error {
+                    print("Failed to unfollow user: \(error)")
+                    return
+                }
+                
+                print("Successfully unfollowed user: \(self._user?.username ?? "")")
+                self.setButtonTo(isFollowing: false)
             }
+        } else {
+            let reference = Database.database().reference().child("following").child(currentLoggedInUserId)
             
-            print("Successfully followed user: \(self._user?.username ?? "")")
+            let values = [userId: 1]
+            
+            reference.updateChildValues(values) { (error, dbReference) in
+                if let error = error {
+                    print("Failed to follow user: \(error)")
+                }
+                
+                print("Successfully followed user: \(self._user?.username ?? "")")
+                self.setButtonTo(isFollowing: true)
+            }
+        }
+    }
+    
+    private func setButtonTo(isFollowing: Bool) {
+        if isFollowing {
+            editProfileFollowButton.setTitle("Unfollow", for: .normal)
+            editProfileFollowButton.backgroundColor = Palette.white.color
+            editProfileFollowButton.setTitleColor(.black, for: .normal)
+            editProfileFollowButton.layer.borderColor = Palette.borderDark.color.cgColor
+        } else {
+            editProfileFollowButton.setTitle("Follow", for: .normal)
+            editProfileFollowButton.backgroundColor = Palette.lightBlue.color
+            editProfileFollowButton.setTitleColor(.white, for: .normal)
+            editProfileFollowButton.layer.borderColor = Palette.borderDark.color.cgColor
         }
     }
     
