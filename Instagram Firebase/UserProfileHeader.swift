@@ -13,6 +13,7 @@ class UserProfileHeader: UICollectionViewCell {
     private let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.backgroundColor = .lightGray
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -101,8 +102,13 @@ class UserProfileHeader: UICollectionViewCell {
     
     private var _user: User? {
         didSet {
-            profileImageView.loadImage(urlString: _user!.profileImageUrl)
             usernameLabel.text = _user!.username
+            
+            if let profileImageUrl = _user?.profileImageUrl, profileImageUrl.count > 0 {
+                profileImageView.loadImage(urlString: profileImageUrl)
+            } else {
+                profileImageView.image = UIImage(named: "user_placeholder_image")
+            }
         }
     }
     
