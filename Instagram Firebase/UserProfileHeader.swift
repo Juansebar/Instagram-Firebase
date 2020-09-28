@@ -10,6 +10,29 @@ import UIKit
 
 class UserProfileHeader: UICollectionViewCell {
     
+    var user: User? {
+        didSet {
+            guard let user = user else { return }
+            
+            _user = user
+            self.user = nil
+        }
+    }
+    
+    private var _user: User? {
+        didSet {
+            usernameLabel.text = _user!.username
+            
+            setupEditFollowButton()
+            
+            if let profileImageUrl = _user?.profileImageUrl, profileImageUrl.count > 0 {
+                profileImageView.loadImage(urlString: profileImageUrl)
+            } else {
+                profileImageView.image = UIImage(named: "user_placeholder_image")
+            }
+        }
+    }
+    
     private let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.backgroundColor = .lightGray
