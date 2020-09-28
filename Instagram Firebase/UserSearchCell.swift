@@ -12,9 +12,20 @@ class UserSearchCell: UICollectionViewCell {
     
     static let cellId = "UserSearchCellCellId"
     
+    var user: User? {
+        didSet {
+            usernameLabel.text = user?.username
+            
+            if let profileImageUrl = user?.profileImageUrl, profileImageUrl.count > 0 {
+                profileImageView.loadImage(urlString: profileImageUrl)
+            } else {
+                profileImageView.image = UIImage(named: "user_placeholder_image")
+            }
+        }
+    }
+    
     private let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
-        imageView.backgroundColor = .purple
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
