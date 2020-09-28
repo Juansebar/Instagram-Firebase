@@ -29,6 +29,7 @@ class UserSearchController: UICollectionViewController {
         navigationItem.titleView = searchBar
         
         collectionView.alwaysBounceVertical = true
+        collectionView.keyboardDismissMode = .onDrag
         collectionView?.backgroundColor = .white
         
         collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: UserSearchCell.cellId)
@@ -63,6 +64,10 @@ class UserSearchController: UICollectionViewController {
         }
     }
     
+}
+
+extension UserSearchController {
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredUsers.count
     }
@@ -73,6 +78,16 @@ class UserSearchController: UICollectionViewController {
         cell.user = filteredUsers[indexPath.item]
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchBar.resignFirstResponder()
+        
+        let user = filteredUsers[indexPath.item]
+        
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfileController.userId = user.uid
+        navigationController?.pushViewController(userProfileController, animated: true)
     }
     
 }
