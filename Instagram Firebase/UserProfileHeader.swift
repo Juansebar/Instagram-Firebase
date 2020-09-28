@@ -189,9 +189,9 @@ class UserProfileHeader: UICollectionViewCell {
             
             reference.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
-                    self.setButtonTo(isFollowing: true)
+                    self.setButtonTo(style: .follow)
                 } else {
-                    self.setButtonTo(isFollowing: false)
+                    self.setButtonTo(style: .unfollow)
                 }
             }) { (error) in
                 print("Failed to fetch following user: \(error)")
@@ -212,7 +212,7 @@ class UserProfileHeader: UICollectionViewCell {
                 }
                 
                 print("Successfully unfollowed user: \(self._user?.username ?? "")")
-                self.setButtonTo(isFollowing: false)
+                self.setButtonTo(style: .unfollow)
             }
         } else {
             let reference = Database.database().reference().child("following").child(currentLoggedInUserId)
@@ -225,18 +225,26 @@ class UserProfileHeader: UICollectionViewCell {
                 }
                 
                 print("Successfully followed user: \(self._user?.username ?? "")")
-                self.setButtonTo(isFollowing: true)
+                self.setButtonTo(style: .follow)
             }
         }
     }
     
-    private func setButtonTo(isFollowing: Bool) {
-        if isFollowing {
+    private enum EditProfileFollowStyle {
+        case editProfile
+        case follow
+        case unfollow
+    }
+    
+    private func setButtonTo(style state: EditProfileFollowStyle) {
+        switch state {
+        case .editProfile: break
+        case .follow:
             editProfileFollowButton.setTitle("Unfollow", for: .normal)
             editProfileFollowButton.backgroundColor = Palette.white.color
             editProfileFollowButton.setTitleColor(.black, for: .normal)
             editProfileFollowButton.layer.borderColor = Palette.borderDark.color.cgColor
-        } else {
+        case .unfollow:
             editProfileFollowButton.setTitle("Follow", for: .normal)
             editProfileFollowButton.backgroundColor = Palette.lightBlue.color
             editProfileFollowButton.setTitleColor(.white, for: .normal)
