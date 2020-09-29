@@ -28,6 +28,8 @@ class HomeController: UICollectionViewController {
         let instagramLogoImage = UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate)
         navigationItem.titleView = UIImageView(image: instagramLogoImage)
         navigationItem.titleView?.tintColor = .black
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCamera))
     }
     
     private func fetchPosts() {
@@ -79,6 +81,13 @@ class HomeController: UICollectionViewController {
         }) { (error) in
             print("Failed to fetch posts: \(error)")
         }
+    }
+    
+    @objc private func handleCamera() {
+        print("show camera")
+        
+        let cameraController = CameraController()
+        present(cameraController, animated: true, completion: nil)
     }
     
 }
