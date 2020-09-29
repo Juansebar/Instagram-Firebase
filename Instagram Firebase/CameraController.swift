@@ -11,18 +11,46 @@ import AVFoundation
 
 class CameraController: UIViewController {
     
+    private let captureButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "capture_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleCapturePhoto), for: .touchUpInside)
+        return button
+    }()
+    
+    private let dismissButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "right_arrow"), for: .normal)
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        return button
+    }()
+    
+    private var captureSession: AVCaptureSession?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Palette.white.color
+        view.backgroundColor = Palette.black.color
         
         setupCaptureSession()
+        
+        setupViews()
+    }
+    
+    private func setupViews() {
+        view.addSubview(captureButton)
+        view.addSubview(dismissButton)
+        
+        captureButton.anchor(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 24, paddingRight: 0, width: 80, height: 80)
+        captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        dismissButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingBottom: 0, paddingRight: 8, width: 50, height: 50)
     }
     
     private func setupCaptureSession() {
         let captureSession = AVCaptureSession()
         
-        // 1. setup inputs
+        // Inputs
         guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
         
         do {
@@ -34,10 +62,30 @@ class CameraController: UIViewController {
             print("Could not setup camera input: \(error)")
         }
         
-        // 2. Setup outputs
+        // Output
+        let output = AVCapturePhotoOutput()
+        if captureSession.canAddOutput(output) {
+            captureSession.addOutput(output)
+        }
         
-        // 3. setup output preview
+        // Preview Layer
+        let previewLayer = AVCaptureVideoPreviewLayer()
+        previewLayer.session = captureSession
+        previewLayer.frame = view.frame
+        view.layer.addSublayer(previewLayer)
         
+        self.captureSession = captureSession
+        self.captureSession?.startRunning()
+    }
+    
+    @objc private func handleCapturePhoto() {
+        print("Capture Photo")
+    }
+    
+    @objc private func handleDismiss() {
+        dismiss(animated: true) {
+            self.captureSession?.stopRunning()
+        }
     }
     
 }

@@ -87,6 +87,7 @@ class HomeController: UICollectionViewController {
         print("show camera")
         
         let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
         present(cameraController, animated: true, completion: nil)
     }
     
