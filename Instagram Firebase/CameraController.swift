@@ -11,6 +11,9 @@ import AVFoundation
 
 class CameraController: UIViewController {
     
+    private var captureSession: AVCaptureSession?
+    private var capturePhotoOutput: AVCapturePhotoOutput?
+    
     private let captureButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "capture_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
@@ -25,7 +28,11 @@ class CameraController: UIViewController {
         return button
     }()
     
-    private var captureSession: AVCaptureSession?
+    private let previewImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +73,8 @@ class CameraController: UIViewController {
         }
         
         // Output
-        let output = AVCapturePhotoOutput()
-        if captureSession.canAddOutput(output) {
+        capturePhotoOutput = AVCapturePhotoOutput()
+        if let output = capturePhotoOutput, captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
         }
         
@@ -83,12 +90,43 @@ class CameraController: UIViewController {
     
     @objc private func handleCapturePhoto() {
         print("Capture Photo")
+        
+        let capturePhotoSettings = AVCapturePhotoSettings()
+        guard let previewFormatType = capturePhotoSettings.availablePreviewPhotoPixelFormatTypes.first else { return }
+        capturePhotoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewFormatType]
+        capturePhotoOutput?.capturePhoto(with: capturePhotoSettings, delegate: self)
     }
     
     @objc private func handleDismiss() {
         dismiss(animated: true) {
             self.captureSession?.stopRunning()
         }
+    }
+    
+    private func previewImageView(shouldDisplay: Bool) {
+        if shouldDisplay {
+            view.addSubview(previewImageView)
+            
+            previewImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        } else {
+            previewImageView.removeFromSuperview()
+        }
+    }
+    
+}
+
+// MARK: - CameraController: AVCapturePhotoCaptureDelegate
+
+extension CameraController: AVCapturePhotoCaptureDelegate {
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        
+        let previewImage = UIImage(data: imageData)
+        previewImageView.image = previewImage
+        
+        previewImageView(shouldDisplay: true)
+        print("Image is ready")
     }
     
 }
