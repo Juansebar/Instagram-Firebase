@@ -23,16 +23,19 @@ class CameraController: UIViewController {
     
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "right_arrow"), for: .normal)
+        button.setImage(UIImage(named: "cancel"), for: .normal)
         button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         return button
     }()
     
-    private let previewImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+    private let previewImageView: PreviewPhotoContainerView = {
+        let imageView = PreviewPhotoContainerView()
         return imageView
     }()
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,8 +92,6 @@ class CameraController: UIViewController {
     }
     
     @objc private func handleCapturePhoto() {
-        print("Capture Photo")
-        
         let capturePhotoSettings = AVCapturePhotoSettings()
         guard let previewFormatType = capturePhotoSettings.availablePreviewPhotoPixelFormatTypes.first else { return }
         capturePhotoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewFormatType]
@@ -103,14 +104,10 @@ class CameraController: UIViewController {
         }
     }
     
-    private func previewImageView(shouldDisplay: Bool) {
-        if shouldDisplay {
-            view.addSubview(previewImageView)
-            
-            previewImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        } else {
-            previewImageView.removeFromSuperview()
-        }
+    private func displayPreviewImageView() {
+        view.addSubview(previewImageView)
+        
+        previewImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     
 }
@@ -125,8 +122,7 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         let previewImage = UIImage(data: imageData)
         previewImageView.image = previewImage
         
-        previewImageView(shouldDisplay: true)
-        print("Image is ready")
+        displayPreviewImageView()
     }
     
 }
