@@ -71,6 +71,10 @@ class HomeController: UICollectionViewController {
                 self.posts.append(post)
             }
             
+            self.posts.sort { (post1, post2) -> Bool in
+                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
+            }
+            
             self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch posts: \(error)")
