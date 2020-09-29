@@ -30,17 +30,20 @@ class CameraController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = Palette.black.color
-        
         setupCaptureSession()
         
         setupViews()
+        setupConstraints()
     }
     
     private func setupViews() {
+        view.backgroundColor = Palette.black.color
+        
         view.addSubview(captureButton)
         view.addSubview(dismissButton)
-        
+    }
+    
+    private func setupConstraints() {
         captureButton.anchor(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: 24, paddingRight: 0, width: 80, height: 80)
         captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
