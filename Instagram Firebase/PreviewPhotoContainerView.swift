@@ -83,6 +83,41 @@ class PreviewPhotoContainerView: UIView {
             }
             
             print("Successfully saved image to library")
+            
+            self.presentSavedImageModalView()
+        }
+    }
+    
+    private func presentSavedImageModalView() {
+        DispatchQueue.main.async {
+            let savedLabel = UILabel()
+            
+            savedLabel.text = "Saved Successfully"
+            savedLabel.textColor = .white
+            savedLabel.font = UIFont.boldSystemFont(ofSize: 18)
+            savedLabel.textAlignment = .center
+            savedLabel.numberOfLines = 0
+            savedLabel.backgroundColor = UIColor(white: 0, alpha: 0.3)
+            
+            self.addSubview(savedLabel)
+            
+            savedLabel.frame = CGRect(x: 0, y: 0, width: 150, height: 80)
+            savedLabel.center = self.center
+            
+            savedLabel.layer.transform = CATransform3DMakeScale(0, 0, 0)
+            
+            // Animate In
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+                savedLabel.layer.transform = CATransform3DMakeScale(1, 1, 1)
+            }) { (completed) in
+                // Animate Out
+                UIView.animate(withDuration: 0.5, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
+                    savedLabel.layer.transform = CATransform3DMakeScale(0.1, 0.1, 0.1)
+                    savedLabel.alpha = 0
+                }) { (completed) in
+                    savedLabel.removeFromSuperview()
+                }
+            }
         }
     }
     
