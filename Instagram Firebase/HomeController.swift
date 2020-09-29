@@ -15,8 +15,10 @@ class HomeController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateHomeFeed), name: Notifications.updateFeedNotificationName, object: nil)
+        
+        collectionView.backgroundColor = .white
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: HomePostCell.cellId)
         
         let refreshControl = UIRefreshControl()
