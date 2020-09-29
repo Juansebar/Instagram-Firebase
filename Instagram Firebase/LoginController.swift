@@ -60,8 +60,7 @@ class LoginController: UIViewController {
         attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.foregroundColor : UIColor.rgb(r: 17, g: 154, b: 237), NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
-        
-//        button.setTitle("Don't have an account? Sign Up", for: .normal)
+    
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         return button
     }()
@@ -94,6 +93,9 @@ class LoginController: UIViewController {
         
         
         setupInputFields()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     private func setupInputFields() {
@@ -106,6 +108,10 @@ class LoginController: UIViewController {
         
         stackView.anchor(top: logoContainerView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 0)
         emailTextField.heightAnchor.constraint(equalToConstant: 45).isActive = true
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @objc private func handleLogin() {

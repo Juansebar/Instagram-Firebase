@@ -68,6 +68,10 @@ extension Date {
         if secondsAgo < minute {
             quotient = secondsAgo
             unit = "second"
+            
+            if quotient == 0 {
+                return "Just now"
+            }
         } else if secondsAgo < hour {
             quotient = secondsAgo / minute
             unit = "min"
