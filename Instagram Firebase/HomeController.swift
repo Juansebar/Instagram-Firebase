@@ -34,6 +34,8 @@ class HomeController: UICollectionViewController {
         let instagramLogoImage = UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate)
         navigationItem.titleView = UIImageView(image: instagramLogoImage)
         navigationItem.titleView?.tintColor = .black
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCamera))
     }
     
     @objc private func handleUpdateHomeFeed() {
@@ -102,6 +104,14 @@ class HomeController: UICollectionViewController {
     @objc private func handleRefresh() {
         posts.removeAll()
         fetchAllPosts()
+    }
+    
+    @objc private func handleCamera() {
+        print("show camera")
+        
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
     }
     
 }
