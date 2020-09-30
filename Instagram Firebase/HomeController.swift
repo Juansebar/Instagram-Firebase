@@ -15,29 +15,44 @@ class HomeController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateHomeFeed), name: Notifications.updateFeedNotificationName, object: nil)
+        
+        collectionView.backgroundColor = .white
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: HomePostCell.cellId)
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
         
         setupNavigationItems()
         
-        fetchPosts()
+        fetchAllPosts()
     }
     
     private func setupNavigationItems() {
         let instagramLogoImage = UIImage(named: "Instagram_logo_white")?.withRenderingMode(.alwaysTemplate)
         navigationItem.titleView = UIImageView(image: instagramLogoImage)
         navigationItem.titleView?.tintColor = .black
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCamera))
     }
     
-    private func fetchPosts() {
+    @objc private func handleUpdateHomeFeed() {
+        handleRefresh()
+    }
+    
+    private func fetchAllPosts() {
+        fetchCurrentUserPosts()
+        fetchFollowingUserIds()
+    }
+    
+    private func fetchCurrentUserPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
         Database.fetchUserWithUID(uid: uid) { [unowned self] (user) in
             self.fetchPostsWithUser(user)
         }
-        
-        fetchFollowingUserIds()
     }
     
     fileprivate func fetchFollowingUserIds() {
@@ -62,6 +77,8 @@ class HomeController: UICollectionViewController {
         let reference = Database.database().reference().child("posts").child(user.uid)
         
         reference.observeSingleEvent(of: .value, with: { (snapshot) in
+            self.collectionView.refreshControl?.endRefreshing()
+            
             guard let snapshotDictionaries = snapshot.value as? [String: Any] else { return }
             
             snapshotDictionaries.forEach { (key, value) in
@@ -79,6 +96,22 @@ class HomeController: UICollectionViewController {
         }) { (error) in
             print("Failed to fetch posts: \(error)")
         }
+    }
+    
+    // iOS9
+    // let refreshControl = UIRefreshControl()
+    
+    @objc private func handleRefresh() {
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    @objc private func handleCamera() {
+        print("show camera")
+        
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
     }
     
 }
