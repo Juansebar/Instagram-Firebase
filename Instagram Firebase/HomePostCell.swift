@@ -8,6 +8,15 @@
 
 import UIKit
 
+protocol HomePostCellDelegate: class {
+    
+    func didTapFavoriteButton()
+    func didTapCommentButton()
+    func didTapMessageButton()
+    func didTapBookmarkButton()
+    
+}
+
 class HomePostCell: UICollectionViewCell {
     
     static let cellId = "HomeControllerCellId"
@@ -60,9 +69,10 @@ class HomePostCell: UICollectionViewCell {
         return button
     }()
     
-    private let commentButton: UIButton = {
+    private lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "comment")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleCommentTap), for: .touchUpInside)
         return button
     }()
     
@@ -84,6 +94,8 @@ class HomePostCell: UICollectionViewCell {
         
         return label
     }()
+    
+    weak var delegate: HomePostCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -135,6 +147,10 @@ class HomePostCell: UICollectionViewCell {
         attributedText.append(NSAttributedString(string: timeAgoText, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.gray]))
         
         captionLabel.attributedText = attributedText
+    }
+    
+    @objc private func handleCommentTap() {
+        delegate?.didTapCommentButton()
     }
     
 }
