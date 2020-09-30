@@ -128,6 +128,7 @@ extension HomeController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomePostCell.cellId, for: indexPath) as? HomePostCell else { return UICollectionViewCell() }
         
         cell.post = posts[indexPath.item]
+        cell.delegate = self
         
         return cell
     }
@@ -146,6 +147,28 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         height += 60
         
         return .init(width: collectionView.frame.width, height: height)
+    }
+    
+}
+
+// MARK: - HomeController: HomePostCellDelegate
+
+extension HomeController: HomePostCellDelegate {
+    
+    func didTapFavoriteButton() {
+        
+    }
+    
+    func didTapCommentButton() {
+        
+    }
+    
+    func didTapMessageButton() {
+        
+    }
+    
+    func didTapBookmarkButton() {
+        
     }
     
 }
