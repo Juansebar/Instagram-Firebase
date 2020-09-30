@@ -24,6 +24,8 @@
 		241CFF7B24EC85CF00F2DF5F /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7A24EC85CF00F2DF5F /* PhotoSelectorController.swift */; };
 		241CFF7E24EC914300F2DF5F /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7D24EC914300F2DF5F /* PhotoSelectorCell.swift */; };
 		241CFF8024EC948E00F2DF5F /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241CFF7F24EC948E00F2DF5F /* PhotoSelectorHeader.swift */; };
+		246FAAE22524DFAB0075A1DC /* CustomAnimationPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FAAE12524DFAB0075A1DC /* CustomAnimationPresentor.swift */; };
+		246FAAE42524E4470075A1DC /* CustomLeftAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FAAE32524E4470075A1DC /* CustomLeftAnimationDismisser.swift */; };
 		2470232F25237ADB005CE0A2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2470232E25237ADB005CE0A2 /* Notifications.swift */; };
 		2470233225238616005CE0A2 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2470233125238616005CE0A2 /* CameraController.swift */; };
 		247023342523A510005CE0A2 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247023332523A510005CE0A2 /* PreviewPhotoContainerView.swift */; };
@@ -61,6 +63,8 @@
 		241CFF7A24EC85CF00F2DF5F /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		241CFF7D24EC914300F2DF5F /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		241CFF7F24EC948E00F2DF5F /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
+		246FAAE12524DFAB0075A1DC /* CustomAnimationPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresentor.swift; sourceTree = "<group>"; };
+		246FAAE32524E4470075A1DC /* CustomLeftAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLeftAnimationDismisser.swift; sourceTree = "<group>"; };
 		2470232E25237ADB005CE0A2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		2470233125238616005CE0A2 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		247023332523A510005CE0A2 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 				24ED5A64251FDCDE00A6698F /* FirebaseUtils.swift */,
 				24ED5A6B252255E200A6698F /* Palette.swift */,
 				2470232E25237ADB005CE0A2 /* Notifications.swift */,
+				246FAAE12524DFAB0075A1DC /* CustomAnimationPresentor.swift */,
+				246FAAE32524E4470075A1DC /* CustomLeftAnimationDismisser.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -355,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2470232F25237ADB005CE0A2 /* Notifications.swift in Sources */,
+				246FAAE22524DFAB0075A1DC /* CustomAnimationPresentor.swift in Sources */,
 				240D3FF324EADC68008125FE /* SignUpController.swift in Sources */,
 				241CFF7E24EC914300F2DF5F /* PhotoSelectorCell.swift in Sources */,
 				24ED5A6C252255E200A6698F /* Palette.swift in Sources */,
@@ -371,6 +378,7 @@
 				24E34AEA24FEA3BE008B9D2C /* Post.swift in Sources */,
 				240D400924EB3C32008125FE /* MainTabBarController.swift in Sources */,
 				241CFF8024EC948E00F2DF5F /* PhotoSelectorHeader.swift in Sources */,
+				246FAAE42524E4470075A1DC /* CustomLeftAnimationDismisser.swift in Sources */,
 				241CFF7B24EC85CF00F2DF5F /* PhotoSelectorController.swift in Sources */,
 				247023342523A510005CE0A2 /* PreviewPhotoContainerView.swift in Sources */,
 				240D3FF124EADC68008125FE /* SceneDelegate.swift in Sources */,
